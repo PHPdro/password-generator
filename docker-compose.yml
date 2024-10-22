@@ -1,0 +1,33 @@
+services:
+    mysql:
+      container_name: passwords_db
+      image: mysql:latest
+      ports:
+        - 3306:3306
+      volumes:
+        - './mysql:/var/lib/mysql'
+      networks:
+        - passwords
+      environment:
+        ALLOW_EMPTY_PASSWORD: "no"
+        MYSQL_ROOT_PASSWORD: admin
+        MYSQL_DATABASE: admin
+        MYSQL_USER: admin
+        MYSQL_PASSWORD: admin
+
+    phpmyadmin:
+      container_name: passwords_phpmyadmin
+      image: phpmyadmin:latest
+      environment:
+        - MYSQL_ROOT_PASSWORD=admin
+        - PMA_HOST=mysql
+        - TZ=America/Maceio
+      ports:
+        - '9090:80'
+      depends_on:
+        - mysql
+      networks:
+        - passwords
+
+networks:
+  passwords:
